@@ -3,6 +3,15 @@ $(document).ready(function(){
     var oggettoIntermedio = {};
     var oggettoIntermedioVenditori = {};
 
+    $('#inserimento-dati').click(function(){
+        var salesmanInserito = $('#seleziona-salesman').val();
+        // console.log(salesmanInserito);
+        var dataInserita = moment($("#inserimento-data").val()).format('DD-MM-YYYY');
+        // console.log(dataInserita);
+        var amountInserito = parseInt($('#ammontare-inserito').val());
+        // console.log(amountInserito);
+    });
+
     $.ajax({
         url: 'http://157.230.17.132:4031/sales',
         method: 'GET',
