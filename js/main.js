@@ -1,6 +1,8 @@
 $(document).ready(function(){
 
     var oggettoIntermedio = {};
+    var oggettoIntermedioVenditori = {};
+    console.log(oggettoIntermedioVenditori);
 
     $.ajax({
         url: 'http://157.230.17.132:4031/sales',
@@ -8,6 +10,8 @@ $(document).ready(function(){
         success: function(data){
             var valoriMese = generaIntroitoMensile(data);
             graficoLinea(valoriMese);
+            var datiVenditaSalesmen = generaDatiSalesmen(data);
+            graficoTorta(datiVenditaSalesmen.labelsVenditore, datiVenditaSalesmen.valoriComplessiviVenditore);
         },
         error: function(){
         }
@@ -33,6 +37,28 @@ $(document).ready(function(){
         return valoriMese
     }
 
+    function generaDatiSalesmen (valOggetto) {
+        var valoreVenditore = valOggetto;
+        for (var i = 0; i < valoreVenditore.length; i++) {
+            var valoreVenditoreSingolo = valoreVenditore[i];
+            var venditoreSingolo = valoreVenditoreSingolo.salesman;
+            if (oggettoIntermedioVenditori[venditoreSingolo] === undefined) {
+                oggettoIntermedioVenditori[venditoreSingolo] = 0;
+            }
+            oggettoIntermedioVenditori[venditoreSingolo] += valoreVenditoreSingolo.amount;
+        }
+        var labelsVenditore = [];
+        var valoriComplessiviVenditore = [];
+        for (var key in oggettoIntermedioVenditori) {
+            labelsVenditore.push(key);
+            valoriComplessiviVenditore.push(oggettoIntermedioVenditori[key]);
+        }
+        return {
+            labelsVenditore: labelsVenditore,
+            valoriComplessiviVenditore: valoriComplessiviVenditore
+        }
+    }
+
     function graficoLinea (valMese) {
         var ctx = $('#grafico-linea');
         var chart = new Chart(ctx, {
@@ -45,6 +71,21 @@ $(document).ready(function(){
                     borderColor: 'blue',
                     lineTension: 0,
                     data: valMese
+                }]
+            }
+        });
+    }
+
+    function graficoTorta (nomiVenditori, valVenditore) {
+        var ctx = $('#grafico-torta');
+        var chartTwo = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: nomiVenditori,
+                datasets: [{
+                    label: 'Vendite per venditore',
+                    data: valVenditore,
+                    backgroundColor: ['lightblue', 'green', 'pink', 'yellow']
                 }]
             }
         });
