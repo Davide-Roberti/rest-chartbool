@@ -2,7 +2,6 @@ $(document).ready(function(){
 
     var oggettoIntermedio = {};
     var oggettoIntermedioVenditori = {};
-    console.log(oggettoIntermedioVenditori);
 
     $.ajax({
         url: 'http://157.230.17.132:4031/sales',
