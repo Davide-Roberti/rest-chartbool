@@ -10,6 +10,7 @@ $(document).ready(function(){
         // console.log(dataInserita);
         var amountInserito = parseInt($('#ammontare-inserito').val());
         // console.log(amountInserito);
+        inserimentoNuoviDati(salesmanInserito, amountInserito, dataInserita);
     });
 
     $.ajax({
@@ -24,6 +25,24 @@ $(document).ready(function(){
         error: function(){
         }
     });
+
+    function inserimentoNuoviDati (saleInserito, amInserito, dtInserita) {
+        $.ajax({
+            url: 'http://157.230.17.132:4031/sales',
+            method: 'POST',
+            data: {
+                salesman: saleInserito,
+                amount: amInserito,
+                date: dtInserita
+            },
+            success: function(){
+
+            },
+            error: function(){
+
+            }
+        });
+    }
 
     function generaIntroitoMensile (valOggetto) {
         var infoVenditore = valOggetto;
