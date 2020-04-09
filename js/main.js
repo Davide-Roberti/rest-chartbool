@@ -3,32 +3,38 @@ $(document).ready(function(){
     var oggettoIntermedio = {};
     var oggettoIntermedioVenditori = {};
 
+    generaGrafici();
 
-    $.ajax({
-        url: 'http://157.230.17.132:4031/sales',
-        method: 'GET',
-        success: function(data){
-            var valoriMese = generaIntroitoMensile(data);
-            graficoLinea(valoriMese);
-            var datiVenditaSalesmen = generaDatiSalesmen(data);
-            graficoTorta(datiVenditaSalesmen.labelsVenditore, datiVenditaSalesmen.valoriComplessiviVenditore);
-
-            $('#inserimento-dati').click(function(){
-                var salesmanInserito = $('#seleziona-salesman').val();
-                // console.log(salesmanInserito);
-                var dataInserita = moment($("#inserimento-data").val()).format('DD-MM-YYYY');
-                // console.log(dataInserita);
-                var amountInserito = parseInt($('#ammontare-inserito').val());
-                // console.log(amountInserito);
-                inserimentoNuoviDati(salesmanInserito, amountInserito, dataInserita);
-            });
-        },
-        error: function(){
-        }
+    $('#inserimento-dati').click(function(){
+        var salesmanInserito = $('#seleziona-salesman').val();
+        // console.log(salesmanInserito);
+        var dataInserita = moment($("#inserimento-data").val()).format('DD-MM-YYYY');
+        // console.log(dataInserita);
+        var amountInserito = $('#ammontare-inserito').val();
+        // console.log(amountInserito);
+        inserimentoNuoviDati(salesmanInserito, amountInserito, dataInserita);
+        generaGrafici();
     });
+
+    function generaGrafici () {
+        $.ajax({
+            url: 'http://157.230.17.132:4031/sales',
+            method: 'GET',
+            success: function(data){
+                var valoriMese = generaIntroitoMensile(data);
+                graficoLinea(valoriMese);
+                var datiVenditaSalesmen = generaDatiSalesmen(data);
+                graficoTorta(datiVenditaSalesmen.labelsVenditore, datiVenditaSalesmen.valoriComplessiviVenditore);
+            },
+            error: function(){
+            }
+        });
+    }
 
 
     function inserimentoNuoviDati (saleInserito, amInserito, dtInserita) {
+        $('#grafico-linea').empty();
+        $('#grafico-torta').empty();
         $.ajax({
             url: 'http://157.230.17.132:4031/sales',
             method: 'POST',
@@ -54,7 +60,7 @@ $(document).ready(function(){
             if (oggettoIntermedio[datazioneMese] === undefined) {
                 oggettoIntermedio[datazioneMese] = 0;
             }
-            oggettoIntermedio[datazioneMese] += venditoreSingolo.amount;
+            oggettoIntermedio[datazioneMese] += parseInt(venditoreSingolo.amount);
         }
         var labelsMese = [];
         var valoriMese = [];
@@ -73,7 +79,7 @@ $(document).ready(function(){
             if (oggettoIntermedioVenditori[venditoreSingolo] === undefined) {
                 oggettoIntermedioVenditori[venditoreSingolo] = 0;
             }
-            oggettoIntermedioVenditori[venditoreSingolo] += valoreVenditoreSingolo.amount;
+            oggettoIntermedioVenditori[venditoreSingolo] += parseInt(valoreVenditoreSingolo.amount);
         }
         var labelsVenditore = [];
         var valoriComplessiviVenditore = [];
