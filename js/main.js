@@ -13,7 +13,6 @@ $(document).ready(function(){
         var amountInserito = $('#ammontare-inserito').val();
         // console.log(amountInserito);
         inserimentoNuoviDati(salesmanInserito, amountInserito, dataInserita);
-        generaGrafici();
     });
 
     function generaGrafici () {
@@ -43,7 +42,8 @@ $(document).ready(function(){
                 amount: amInserito,
                 date: dtInserita
             },
-            success: function(){
+            success: function(data){
+                generaGrafici();
             },
             error: function(){
 
