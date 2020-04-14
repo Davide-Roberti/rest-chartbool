@@ -9,6 +9,25 @@
     margin: 0 auto;
 }
 
+.form-inserimento {
+    padding: 30px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: lightcoral;
+    border-radius: 6px;
+    margin: 50px 200px;
+}
+
+.form-inserimento button {
+    padding: 5px 10px;
+    color: white;
+    background-color: lightblue;
+    border-radius: 5px;
+    border: none;
+    font-weight: bold;
+}
+
 .grafici {
     display: flex;
     justify-content: center;
